@@ -99,6 +99,11 @@ def process_uploaded_file(uploaded_file):
     func = switcher.get(file_extension, lambda: st.error("Unsupported file format"))
     return func(uploaded_file)
 
+def delete_history_item(idx):
+    st.session_state.history.pop(idx)
+
+def delete_favorite_item(idx):
+    st.session_state.favorites.pop(idx)
 
 def display_history_and_favorites():
     st.sidebar.write("History:")
@@ -106,10 +111,8 @@ def display_history_and_favorites():
         st.sidebar.markdown(f"**Question {idx + 1}:** {item['question']}")
         st.sidebar.markdown(f"**Answer {idx + 1}:** {item['answer']}")
         unique_key = f"delete_history_{idx}_{time.time()}"
-        delete_button = st.sidebar.button(f"Delete history item {idx + 1}", key=unique_key)
-        if delete_button:
-            st.session_state.history.pop(idx)
-            display_history_and_favorites()
+        if st.sidebar.button(f"Delete history item {idx + 1}", key=unique_key):
+            delete_history_item(idx)
             break
 
     st.sidebar.write("Favorites:")
@@ -117,11 +120,32 @@ def display_history_and_favorites():
         st.sidebar.markdown(f"**Question {idx + 1}:** {item['question']}")
         st.sidebar.markdown(f"**Answer {idx + 1}:** {item['answer']}")
         unique_key = f"delete_favorite_{idx}_{time.time()}"
-        delete_button = st.sidebar.button(f"Delete favorite item {idx + 1}", key=unique_key)
-        if delete_button:
-            st.session_state.favorites.pop(idx)
-            display_history_and_favorites()
+        if st.sidebar.button(f"Delete favorite item {idx + 1}", key=unique_key):
+            delete_favorite_item(idx)
             break
+
+# def display_history_and_favorites():
+#     st.sidebar.write("History:")
+#     for idx, item in enumerate(st.session_state.history):
+#         st.sidebar.markdown(f"**Question {idx + 1}:** {item['question']}")
+#         st.sidebar.markdown(f"**Answer {idx + 1}:** {item['answer']}")
+#         unique_key = f"delete_history_{idx}_{time.time()}"
+#         delete_button = st.sidebar.button(f"Delete history item {idx + 1}", key=unique_key)
+#         if delete_button:
+#             st.session_state.history.pop(idx)
+#             display_history_and_favorites()
+#             break
+
+#     st.sidebar.write("Favorites:")
+#     for idx, item in enumerate(st.session_state.favorites):
+#         st.sidebar.markdown(f"**Question {idx + 1}:** {item['question']}")
+#         st.sidebar.markdown(f"**Answer {idx + 1}:** {item['answer']}")
+#         unique_key = f"delete_favorite_{idx}_{time.time()}"
+#         delete_button = st.sidebar.button(f"Delete favorite item {idx + 1}", key=unique_key)
+#         if delete_button:
+#             st.session_state.favorites.pop(idx)
+#             display_history_and_favorites()
+#             break
 
 def export_results(answer="", export_format="", file_name="", question=""):
     try:
@@ -179,10 +203,21 @@ def main():
 
                 st.session_state.history.append({"question": user_question, "answer": answer})
                 export_results(answer=answer, export_format="DOCX", file_name="file1", question=user_question)
+                
+                # add to favorites checkbox
+                add_to_favorites = st.checkbox("Add to favorites", key=user_question)
+                if add_to_favorites:
+                    # create a copy of the dictionary and append to favorites
+                    favorite_item = dict(question=user_question, answer=answer)
+                    st.session_state.favorites.append(favorite_item)
+                    
+            else:
+                st.warning("Please enter a question before clicking the 'Get Answer' button")
 
-                if st.button("Add to favorites"):
-                    st.session_state.favorites.append({"question": user_question, "answer": answer})
-                    display_history_and_favorites()
+#                 if st.button("Add to favorites"):
+#                     st.session_state.favorites.append({"question": user_question, "answer": answer})
+#                     display_history_and_favorites()
+
         else:
             st.error("Unable to process the uploaded file")
 
