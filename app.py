@@ -4,6 +4,7 @@ import time
 
 import docx
 import openai
+import os
 import pandas as pd
 import streamlit as st
 from docx import Document
@@ -82,14 +83,28 @@ def generate_answer(prompt, temperature, max_tokens, top_p):
         st.error(f"An error occurred while generating the answer: {e}")
         return ""
 
+# def process_uploaded_file(uploaded_file):
+#     if uploaded_file.type == "application/pdf":
+#         return read_pdf(uploaded_file)
+#     elif uploaded_file.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+#         return read_docx(uploaded_file)
+#     elif uploaded_file.type == "text/plain":
+#         return read_txt(uploaded_file)
+#     elif uploaded_file.type.startswith("image/"):
+#         return read_image(uploaded_file)
+#     else:
+#         st.error("Unsupported file format")
+#         return None
+
 def process_uploaded_file(uploaded_file):
-    if uploaded_file.type == "application/pdf":
-        return read_pdf(uploaded_file)
-    elif uploaded_file.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-        return read_docx(uploaded_file)
-    elif uploaded_file.type == "text/plain":
-        return read_txt(uploaded_file)
-    elif uploaded_file.type.startswith("image/"):
+    file_extension = os.path.splitext(uploaded_file.name)[1].lower()
+    if file_extension == ".pdf":
+        return read_pdf_text(uploaded_file)
+    elif file_extension == ".docx":
+        return read_docx_file(uploaded_file)
+    elif file_extension == ".txt":
+        return read_txt_file(uploaded_file)
+    elif file_extension in [".png", ".jpg", ".jpeg"]:
         return read_image(uploaded_file)
     else:
         st.error("Unsupported file format")
