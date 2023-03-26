@@ -129,11 +129,6 @@ def export_results(answer="", export_format="", file_name="", question=""):
 def main():
     openai.api_key = st.secrets["OPEN_API"]
 
-#     if "favorites" not in st.session_state:
-#         st.session_state.favorites = []
-#     if "history" not in st.session_state:
-#         st.session_state.history = []
-
     st.title("File Upload and GPT-4 Q&A")
     uploaded_file = st.file_uploader("Choose a file", type=["pdf", "docx", "txt", "png", "jpg", "jpeg"])
 
