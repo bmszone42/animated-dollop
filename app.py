@@ -108,7 +108,7 @@ def display_history_items():
 
 def display_favorite_items():
     for idx, item in enumerate(st.session_state.favorites):
-                st.sidebar.markdown(f"**Question {idx + 1}:** {item['question']}")
+        st.sidebar.markdown(f"**Question {idx + 1}:** {item['question']}")
         st.sidebar.markdown(f"**Answer {idx + 1}:** {item['answer']}")
         unique_key = f"delete_favorite_{idx}_{time.time()}"
         delete_button = st.sidebar.button(f"Delete favorite item {idx + 1}", key=unique_key)
