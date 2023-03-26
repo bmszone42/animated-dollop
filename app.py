@@ -204,19 +204,19 @@ def main():
                 st.session_state.history.append({"question": user_question, "answer": answer})
                 export_results(answer=answer, export_format="DOCX", file_name="file1", question=user_question)
                 
-                # add to favorites checkbox
-                add_to_favorites = st.checkbox("Add to favorites", key=user_question)
-                if add_to_favorites:
-                    # create a copy of the dictionary and append to favorites
-                    favorite_item = dict(question=user_question, answer=answer)
-                    st.session_state.favorites.append(favorite_item)
+#                 # add to favorites checkbox
+#                 add_to_favorites = st.checkbox("Add to favorites", key=user_question)
+#                 if add_to_favorites:
+#                     # create a copy of the dictionary and append to favorites
+#                     favorite_item = dict(question=user_question, answer=answer)
+#                     st.session_state.favorites.append(favorite_item)
                     
             else:
                 st.warning("Please enter a question before clicking the 'Get Answer' button")
 
-#                 if st.button("Add to favorites"):
-#                     st.session_state.favorites.append({"question": user_question, "answer": answer})
-#                     display_history_and_favorites()
+                if st.button("Add to favorites"):
+                    st.session_state.favorites.append({"question": user_question, "answer": answer})
+                    display_history_and_favorites()
 
         else:
             st.error("Unable to process the uploaded file")
