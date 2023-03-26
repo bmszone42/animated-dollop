@@ -85,7 +85,7 @@ def process_uploaded_file(uploaded_file):
     func = switcher.get(file_extension, lambda: st.error("Unsupported file format"))
     return func(uploaded_file)
 
-def delete_history_item(idx):
+def delete_history_item(idx: int):
     st.session_state.history.pop(idx)
     display_history_and_favorites()
 
