@@ -99,11 +99,11 @@ def generate_answer(prompt, temperature, max_tokens, top_p):
 def process_uploaded_file(uploaded_file):
     file_extension = os.path.splitext(uploaded_file.name)[1].lower()
     if file_extension == ".pdf":
-        return read_pdf_text(uploaded_file)
+        return read_pdf(uploaded_file)
     elif file_extension == ".docx":
-        return read_docx_file(uploaded_file)
+        return read_docx(uploaded_file)
     elif file_extension == ".txt":
-        return read_txt_file(uploaded_file)
+        return read_txt(uploaded_file)
     elif file_extension in [".png", ".jpg", ".jpeg"]:
         return read_image(uploaded_file)
     else:
