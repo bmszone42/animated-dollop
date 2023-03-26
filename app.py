@@ -213,8 +213,9 @@ def main():
                     
             else:
                 st.warning("Please enter a question before clicking the 'Get Answer' button")
-
-                if st.button("Add to favorites"):
+                
+                add_to_favorites = st.checkbox("Add to favorites")
+                if add_to_favorites:
                     st.session_state.favorites.append({"question": user_question, "answer": answer})
                     display_history_and_favorites()
 
