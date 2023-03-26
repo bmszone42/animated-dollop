@@ -72,20 +72,6 @@ def generate_answer(prompt, temperature, max_tokens, top_p):
         st.error(f"An error occurred while generating the answer: {e}")
         return ""
 
-# def process_uploaded_file(uploaded_file):
-#     file_extension = os.path.splitext(uploaded_file.name)[1].lower()
-#     if file_extension == ".pdf":
-#         return read_pdf(uploaded_file)
-#     elif file_extension == ".docx":
-#         return read_docx(uploaded_file)
-#     elif file_extension == ".txt":
-#         return read_txt(uploaded_file)
-#     elif file_extension in [".png", ".jpg", ".jpeg"]:
-#         return read_image(uploaded_file)
-#     else:
-#         st.error("Unsupported file format")
-#         return None
-
 def process_uploaded_file(uploaded_file):
     file_extension = os.path.splitext(uploaded_file.name)[1].lower()
     switcher = {
@@ -101,9 +87,11 @@ def process_uploaded_file(uploaded_file):
 
 def delete_history_item(idx):
     st.session_state.history.pop(idx)
+    display_history_and_favorites()
 
 def delete_favorite_item(idx):
     st.session_state.favorites.pop(idx)
+    display_history_and_favorites()
 
 def display_history_and_favorites():
     st.sidebar.write("History:")
