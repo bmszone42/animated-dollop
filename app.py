@@ -131,6 +131,11 @@ def main():
 
     st.title("File Upload and GPT-4 Q&A")
     uploaded_file = st.file_uploader("Choose a file", type=["pdf", "docx", "txt", "png", "jpg", "jpeg"])
+    
+    if "favorites" not in st.session_state:
+        st.session_state.favorites = []
+    if "history" not in st.session_state:
+        st.session_state.history = []
 
     if uploaded_file:
         document_text = process_uploaded_file(uploaded_file)
