@@ -12,21 +12,26 @@ from PIL import Image
 from PyPDF2 import PdfReader
 from PyPDF2.errors import PdfReadError
 
-# Define function to split text
 def split_text(self, text, width):
     lines = text.split("\n")
-    wrapped_lines = []
-    for line in lines:
-        words = line.split(" ")
-        wrapped_line = ""
-        for word in words:
-            if self.get_string_width(wrapped_line + word) < width:
-                wrapped_line += " " + word
-            else:
-                wrapped_lines.append(wrapped_line)
-                wrapped_line = word
-        wrapped_lines.append(wrapped_line)
+    wrapped_lines = [word for line in lines for word in line.split(" ")]
     return wrapped_lines
+
+# # Define function to split text
+# def split_text(self, text, width):
+#     lines = text.split("\n")
+#     wrapped_lines = []
+#     for line in lines:
+#         words = line.split(" ")
+#         wrapped_line = ""
+#         for word in words:
+#             if self.get_string_width(wrapped_line + word) < width:
+#                 wrapped_line += " " + word
+#             else:
+#                 wrapped_lines.append(wrapped_line)
+#                 wrapped_line = word
+#         wrapped_lines.append(wrapped_line)
+#     return wrapped_lines
 
 @st.cache_resource()
 def read_pdf(file):
