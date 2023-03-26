@@ -17,22 +17,6 @@ def split_text(self, text, width):
     wrapped_lines = [word for line in lines for word in line.split(" ")]
     return wrapped_lines
 
-# # Define function to split text
-# def split_text(self, text, width):
-#     lines = text.split("\n")
-#     wrapped_lines = []
-#     for line in lines:
-#         words = line.split(" ")
-#         wrapped_line = ""
-#         for word in words:
-#             if self.get_string_width(wrapped_line + word) < width:
-#                 wrapped_line += " " + word
-#             else:
-#                 wrapped_lines.append(wrapped_line)
-#                 wrapped_line = word
-#         wrapped_lines.append(wrapped_line)
-#     return wrapped_lines
-
 @st.cache_resource()
 def read_pdf(file):
     try:
@@ -88,19 +72,6 @@ def generate_answer(prompt, temperature, max_tokens, top_p):
         st.error(f"An error occurred while generating the answer: {e}")
         return ""
 
-# def process_uploaded_file(uploaded_file):
-#     if uploaded_file.type == "application/pdf":
-#         return read_pdf(uploaded_file)
-#     elif uploaded_file.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-#         return read_docx(uploaded_file)
-#     elif uploaded_file.type == "text/plain":
-#         return read_txt(uploaded_file)
-#     elif uploaded_file.type.startswith("image/"):
-#         return read_image(uploaded_file)
-#     else:
-#         st.error("Unsupported file format")
-#         return None
-
 def process_uploaded_file(uploaded_file):
     file_extension = os.path.splitext(uploaded_file.name)[1].lower()
     if file_extension == ".pdf":
@@ -115,7 +86,8 @@ def process_uploaded_file(uploaded_file):
         st.error("Unsupported file format")
         return None
 
-def display_history_items():
+def display_history_and_favorites():
+    st.sidebar.write("History:")
     for idx, item in enumerate(st.session_state.history):
         st.sidebar.markdown(f"**Question {idx + 1}:** {item['question']}")
         st.sidebar.markdown(f"**Answer {idx + 1}:** {item['answer']}")
@@ -123,10 +95,10 @@ def display_history_items():
         delete_button = st.sidebar.button(f"Delete history item {idx + 1}", key=unique_key)
         if delete_button:
             st.session_state.history.pop(idx)
-            display_history_items()
+            display_history_and_favorites()
             break
 
-def display_favorite_items():
+    st.sidebar.write("Favorites:")
     for idx, item in enumerate(st.session_state.favorites):
         st.sidebar.markdown(f"**Question {idx + 1}:** {item['question']}")
         st.sidebar.markdown(f"**Answer {idx + 1}:** {item['answer']}")
@@ -134,15 +106,8 @@ def display_favorite_items():
         delete_button = st.sidebar.button(f"Delete favorite item {idx + 1}", key=unique_key)
         if delete_button:
             st.session_state.favorites.pop(idx)
-            display_favorite_items()
+            display_history_and_favorites()
             break
-
-def display_history_and_favorites():
-    st.sidebar.write("History:")
-    display_history_items()
-
-    st.sidebar.write("Favorites:")
-    display_favorite_items()
 
 def export_results(answer="", export_format="", file_name="", question=""):
     try:
@@ -164,10 +129,10 @@ def export_results(answer="", export_format="", file_name="", question=""):
 def main():
     openai.api_key = st.secrets["OPEN_API"]
 
-    if "favorites" not in st.session_state:
-        st.session_state.favorites = []
-    if "history" not in st.session_state:
-        st.session_state.history = []
+#     if "favorites" not in st.session_state:
+#         st.session_state.favorites = []
+#     if "history" not in st.session_state:
+#         st.session_state.history = []
 
     st.title("File Upload and GPT-4 Q&A")
     uploaded_file = st.file_uploader("Choose a file", type=["pdf", "docx", "txt", "png", "jpg", "jpeg"])
